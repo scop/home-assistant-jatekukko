@@ -19,7 +19,7 @@ jobs:
         with:
           release-type: "simple"
           pull-request-title-pattern: "chore: release${component} ${version}"
-          extra-files:
+          extra-files: |-
             - type: "json"
               path: "custom_components/jatekukko/manifest.json"
               jsonpath: "$.version"
