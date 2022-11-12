@@ -1,4 +1,4 @@
-name: HACS action
+name: Check
 
 on:
   push:
@@ -14,3 +14,8 @@ jobs:
         with:
           category: "integration"
           ignore: "brands information"
+  hassfest:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v2"
+      - uses: "home-assistant/actions/hassfest@master"
