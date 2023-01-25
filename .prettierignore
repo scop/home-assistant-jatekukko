@@ -1,2 +1,3 @@
 /.release-please-manifest.json
 /custom_components/jatekukko/manifest.json
+/custom_components/*/translations/*.json
