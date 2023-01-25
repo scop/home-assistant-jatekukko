@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import datetime
 
-from pytekukko.models import InvoiceHeader
-
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -13,6 +11,7 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+from pytekukko.models import InvoiceHeader
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN
 from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
@@ -20,7 +19,9 @@ from .models import JatekukkoData, ServiceData
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Jätekukko calendar entries based on a config entry."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
@@ -64,7 +65,6 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @callback
     def update_from_latest_data(self) -> None:
         """Update the state."""
-
         service_data = self.coordinator.data.service_datas.get(self._pos)
         if not service_data:
             self._attr_available = False

@@ -7,8 +7,6 @@ import asyncio
 from http import HTTPStatus
 
 import aiohttp
-from pytekukko import Pytekukko
-
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.device_registry import DeviceEntryType
@@ -17,6 +15,7 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+from pytekukko import Pytekukko
 
 from .const import CONF_CUSTOMER_NUMBER, DEFAULT_UPDATE_INTERVAL, DOMAIN, LOGGER
 from .models import JatekukkoData, ServiceData
@@ -34,7 +33,7 @@ class JatekukkoCoordinatorEntity(CoordinatorEntity):
             default_model="Omakukko",
             entry_type=DeviceEntryType.SERVICE,
             identifiers={
-                (DOMAIN, self.coordinator.config_entry.data[CONF_CUSTOMER_NUMBER])
+                (DOMAIN, self.coordinator.config_entry.data[CONF_CUSTOMER_NUMBER]),
             },
             name=self.coordinator.config_entry.data[CONF_CUSTOMER_NUMBER],
         )

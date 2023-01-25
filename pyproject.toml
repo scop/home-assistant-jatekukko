@@ -1,106 +1,21 @@
 [tool.black]
 target-version = ["py39", "py310"]
 
-[tool.isort]
-# https://github.com/PyCQA/isort/wiki/isort-Settings
-profile = "black"
-# will group `import x` and `from x import` of the same module.
-force_sort_within_sections = true
-known_first_party = ["homeassistant", "tests"]
-forced_separate = ["tests"]
-combine_as_imports = true
-
-[tool.pylint.MAIN]
-py-version = "3.9"
-ignore = ["tests"]
-# Use a conservative default here; 2 should speed up most setups and not hurt
-# any too bad. Override on command line as appropriate.
-jobs = 2
-load-plugins = ["pylint.extensions.code_style", "pylint.extensions.typing"]
-persistent = false
-extension-pkg-allow-list = [
-  "av.audio.stream",
-  "av.stream",
-  "ciso8601",
-  "orjson",
-  "cv2",
+[tool.ruff]
+target-version = "py39"
+select = ["ALL"]
+ignore = [
+  "ANN",
+  "D203", # Black
+  "D213", # Ping/pong with D212
+  #"E203", # Black, uncomment when/if ruff starts to support
+  "E501", # Black
+  "S101",
 ]
-fail-on = ["I"]
+fix = true
 
-[tool.pylint.BASIC]
-class-const-naming-style = "any"
-good-names = ["_", "ev", "ex", "fp", "i", "id", "j", "k", "Run", "ip"]
-
-[tool.pylint."MESSAGES CONTROL"]
-# Reasons disabled:
-# format - handled by black
-# locally-disabled - it spams too much
-# duplicate-code - unavoidable
-# cyclic-import - doesn't test if both import on load
-# abstract-class-little-used - prevents from setting right foundation
-# unused-argument - generic callbacks and setup methods create a lot of warnings
-# too-many-* - are not enforced for the sake of readability
-# too-few-* - same as too-many-*
-# abstract-method - with intro of async there are always methods missing
-# inconsistent-return-statements - doesn't handle raise
-# too-many-ancestors - it's too strict.
-# wrong-import-order - isort guards this
-# consider-using-f-string - str.format sometimes more readable
-# ---
-# Enable once current issues are fixed:
-# consider-using-namedtuple-or-dataclass (Pylint CodeStyle extension)
-# consider-using-assignment-expr (Pylint CodeStyle extension)
-disable = [
-  "format",
-  "abstract-method",
-  "cyclic-import",
-  "duplicate-code",
-  "inconsistent-return-statements",
-  "locally-disabled",
-  "not-context-manager",
-  "too-few-public-methods",
-  "too-many-ancestors",
-  "too-many-arguments",
-  "too-many-branches",
-  "too-many-instance-attributes",
-  "too-many-lines",
-  "too-many-locals",
-  "too-many-public-methods",
-  "too-many-return-statements",
-  "too-many-statements",
-  "too-many-boolean-expressions",
-  "unused-argument",
-  "wrong-import-order",
-  "consider-using-f-string",
-  "consider-using-namedtuple-or-dataclass",
-  "consider-using-assignment-expr",
-]
-enable = [
-  #"useless-suppression",  # temporarily every now and then to clean them up
-  "use-symbolic-message-instead",
-]
-
-[tool.pylint.REPORTS]
-score = false
-
-[tool.pylint.TYPECHECK]
-ignored-classes = [
-  "_CountingAttr", # for attrs
-
-]
-mixin-class-rgx = ".*[Mm]ix[Ii]n"
-
-[tool.pylint.FORMAT]
-expected-line-ending-format = "LF"
-
-[tool.pylint.EXCEPTIONS]
-overgeneral-exceptions = ["BaseException", "Exception", "HomeAssistantError"]
-
-[tool.pylint.TYPING]
-runtime-typing = false
-
-[tool.pylint.CODE_STYLE]
-max-line-length-suggestions = 72
+[tool.ruff.isort]
+force-sort-within-sections = true # Home Assistant preference
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
