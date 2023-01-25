@@ -38,10 +38,10 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     try:
         _ = await client.login()
     except aiohttp.ClientConnectionError as ex:
-        raise CannotConnect from ex
+        raise CannotConnectError from ex
     except aiohttp.ClientResponseError as ex:
         if ex.status == HTTPStatus.UNAUTHORIZED:
-            raise InvalidAuth from ex
+            raise InvalidAuthError from ex
         raise
 
     return {"title": data["customer_number"]}
@@ -70,9 +70,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         try:
             info = await validate_input(self.hass, user_input)
-        except CannotConnect:
+        except CannotConnectError:
             errors["base"] = "cannot_connect"
-        except InvalidAuth:
+        except InvalidAuthError:
             errors["base"] = "invalid_auth"
         except Exception:  # pylint: disable=broad-except
             LOGGER.exception("Unexpected exception")
@@ -100,9 +100,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
-            except CannotConnect:
+            except CannotConnectError:
                 errors["base"] = "cannot_connect"
-            except InvalidAuth:
+            except InvalidAuthError:
                 errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
                 LOGGER.exception("Unexpected exception")
@@ -121,9 +121,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-class CannotConnect(HomeAssistantError):
+class CannotConnectError(HomeAssistantError):
     """Error to indicate we cannot connect."""
 
 
-class InvalidAuth(HomeAssistantError):
+class InvalidAuthError(HomeAssistantError):
     """Error to indicate there is invalid auth."""
