@@ -11,6 +11,8 @@ ignore = [
   #"E203", # Black, uncomment when/if ruff starts to support
   "E501", # Black
   "S101",
+  "TCH", # Maybe sometime
+
 ]
 fix = true
 
