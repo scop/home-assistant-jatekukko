@@ -15,6 +15,7 @@ ignore = [
 fix = true
 
 [tool.ruff.isort]
+combine-as-imports = true # Home Assistant preference
 force-sort-within-sections = true # Home Assistant preference
 
 [tool.pytest.ini_options]
