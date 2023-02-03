@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/scop/home-assistant-jatekukko/compare/v0.10.0...v0.10.1) (2023-02-03)
+
+
+### Bug Fixes
+
+* make use of pytekukko's (assumed) service timezone ([c9dfcd3](https://github.com/scop/home-assistant-jatekukko/commit/c9dfcd3fb00fd0225a64db176f79bd3893c99bfc))
+
 ## [0.10.0](https://github.com/scop/home-assistant-jatekukko/compare/v0.9.0...v0.10.0) (2022-12-06)
 
 

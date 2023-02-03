@@ -1,7 +1,7 @@
 {
   "domain": "jatekukko",
   "name": "Jätekukko",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "integration_type": "service",
   "documentation": "https://github.com/scop/home-assistant-jatekukko",
   "issue_tracker": "https://github.com/scop/home-assistant-jatekukko/issues",
