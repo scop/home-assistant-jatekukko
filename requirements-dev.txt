@@ -1,2 +1,4 @@
 pytekukko ==0.13.0
+
+black ==22.10.0
 ruff ==0.0.240
