@@ -11,6 +11,7 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+from pytekukko import SERVICE_TIMEZONE
 from pytekukko.models import InvoiceHeader
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN
@@ -77,7 +78,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        today = datetime.date.today()
+        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         assert self.name is not None
         for date in self.collection_schedule:
             if date >= today:
@@ -142,7 +143,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        today = datetime.date.today()
+        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for invoice_header in self.invoice_headers:
             if invoice_header.due_date >= today:
                 return CalendarEvent(
