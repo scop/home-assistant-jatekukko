@@ -78,8 +78,9 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
+        if not self.name:  # should not really happen, but can in theory
+            return None
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
-        assert self.name is not None
         for date in self.collection_schedule:
             if date >= today:
                 return CalendarEvent(start=date, end=date, summary=self.name)
@@ -92,6 +93,9 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
+        if not self.name:  # should not really happen, but can in theory
+            return []
+
         start_date_date = start_date.date()
         end_date_date = end_date.date()
 
@@ -100,7 +104,6 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
             self.collection_schedule,
         )
 
-        assert self.name is not None
         return [
             CalendarEvent(start=date, end=date, summary=self.name)
             for date in matching_dates
