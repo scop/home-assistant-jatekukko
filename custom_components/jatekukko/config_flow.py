@@ -5,15 +5,14 @@ from http import HTTPStatus
 from typing import Any, Final
 
 import aiohttp
-from pytekukko import Pytekukko
-import voluptuous as vol
-
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from pytekukko import Pytekukko
+import voluptuous as vol
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN, LOGGER
 
@@ -21,7 +20,7 @@ STEP_USER_DATA_SCHEMA: Final = vol.Schema(
     {
         vol.Required(CONF_CUSTOMER_NUMBER): str,
         vol.Required(CONF_PASSWORD): str,
-    }
+    },
 )
 
 
@@ -30,18 +29,19 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
-
     client = Pytekukko(
-        async_get_clientsession(hass), data["customer_number"], data["password"]
+        async_get_clientsession(hass),
+        data["customer_number"],
+        data["password"],
     )
 
     try:
         _ = await client.login()
     except aiohttp.ClientConnectionError as ex:
-        raise CannotConnect from ex
+        raise CannotConnectError from ex
     except aiohttp.ClientResponseError as ex:
         if ex.status == HTTPStatus.UNAUTHORIZED:
-            raise InvalidAuth from ex
+            raise InvalidAuthError from ex
         raise
 
     return {"title": data["customer_number"]}
@@ -53,12 +53,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
+        self,
+        user_input: dict[str, Any] | None = None,
     ) -> FlowResult:
         """Handle the initial step."""
         if user_input is None:
             return self.async_show_form(
-                step_id="user", data_schema=STEP_USER_DATA_SCHEMA
+                step_id="user",
+                data_schema=STEP_USER_DATA_SCHEMA,
             )
 
         await self.async_set_unique_id(user_input["customer_number"])
@@ -68,18 +70,20 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         try:
             info = await validate_input(self.hass, user_input)
-        except CannotConnect:
+        except CannotConnectError:
             errors["base"] = "cannot_connect"
-        except InvalidAuth:
+        except InvalidAuthError:
             errors["base"] = "invalid_auth"
-        except Exception:  # pylint: disable=broad-except
+        except Exception:  # noqa: BLE001
             LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
         else:
             return self.async_create_entry(title=info["title"], data=user_input)
 
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user",
+            data_schema=STEP_USER_DATA_SCHEMA,
+            errors=errors,
         )
 
     async def async_step_reauth(self, _: dict[str, Any]) -> FlowResult:
@@ -87,20 +91,20 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
-        self, user_input: dict[str, Any] | None = None
+        self,
+        user_input: dict[str, Any] | None = None,
     ) -> FlowResult:
         """Dialog that informs the user that reauth is required."""
-
         errors = {}
 
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
-            except CannotConnect:
+            except CannotConnectError:
                 errors["base"] = "cannot_connect"
-            except InvalidAuth:
+            except InvalidAuthError:
                 errors["base"] = "invalid_auth"
-            except Exception:  # pylint: disable=broad-except
+            except Exception:  # noqa: BLE001
                 LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
@@ -117,9 +121,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-class CannotConnect(HomeAssistantError):
+class CannotConnectError(HomeAssistantError):
     """Error to indicate we cannot connect."""
 
 
-class InvalidAuth(HomeAssistantError):
+class InvalidAuthError(HomeAssistantError):
     """Error to indicate there is invalid auth."""

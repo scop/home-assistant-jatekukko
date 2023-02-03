@@ -1,12 +1,11 @@
 """The jatekukko integration."""
 from __future__ import annotations
 
-from pytekukko import Pytekukko
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from pytekukko import Pytekukko
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN, LOGGER
 from .coordinator import JatekukkoCoordinator
@@ -42,7 +41,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         coordinator = hass.data[DOMAIN].pop(entry.entry_id)
         try:
             await coordinator.client.logout()
-        except Exception:  # pylint: disable=broad-except
+        except Exception:  # noqa: BLE001
             LOGGER.debug("Could not logout", exc_info=True)
 
     return unload_ok

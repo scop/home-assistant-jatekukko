@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import datetime
 
-from pytekukko.models import InvoiceHeader
-
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -13,6 +11,8 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+from pytekukko import SERVICE_TIMEZONE
+from pytekukko.models import InvoiceHeader
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN
 from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
@@ -20,7 +20,9 @@ from .models import JatekukkoData, ServiceData
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Jätekukko calendar entries based on a config entry."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
@@ -64,7 +66,6 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @callback
     def update_from_latest_data(self) -> None:
         """Update the state."""
-
         service_data = self.coordinator.data.service_datas.get(self._pos)
         if not service_data:
             self._attr_available = False
@@ -77,8 +78,9 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        today = datetime.date.today()
-        assert self.name is not None
+        if not self.name:  # should not really happen, but can in theory
+            return None
+        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for date in self.collection_schedule:
             if date >= today:
                 return CalendarEvent(start=date, end=date, summary=self.name)
@@ -86,11 +88,14 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     async def async_get_events(
         self,
-        hass: HomeAssistant,
+        hass: HomeAssistant,  # noqa: ARG002
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
+        if not self.name:  # should not really happen, but can in theory
+            return []
+
         start_date_date = start_date.date()
         end_date_date = end_date.date()
 
@@ -99,7 +104,6 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
             self.collection_schedule,
         )
 
-        assert self.name is not None
         return [
             CalendarEvent(start=date, end=date, summary=self.name)
             for date in matching_dates
@@ -142,7 +146,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        today = datetime.date.today()
+        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for invoice_header in self.invoice_headers:
             if invoice_header.due_date >= today:
                 return CalendarEvent(
@@ -154,7 +158,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
 
     async def async_get_events(
         self,
-        hass: HomeAssistant,
+        hass: HomeAssistant,  # noqa: ARG002
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
