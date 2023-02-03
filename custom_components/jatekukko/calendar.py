@@ -87,7 +87,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     async def async_get_events(
         self,
-        hass: HomeAssistant,  # noqa: unused-method-argument
+        hass: HomeAssistant,  # noqa: ARG002
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
@@ -155,7 +155,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
 
     async def async_get_events(
         self,
-        hass: HomeAssistant,  # noqa: unused-method-argument
+        hass: HomeAssistant,  # noqa: ARG002
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:

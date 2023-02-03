@@ -41,7 +41,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         coordinator = hass.data[DOMAIN].pop(entry.entry_id)
         try:
             await coordinator.client.logout()
-        except Exception:  # noqa: blind-except
+        except Exception:  # noqa: BLE001
             LOGGER.debug("Could not logout", exc_info=True)
 
     return unload_ok
