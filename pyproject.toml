@@ -2,11 +2,10 @@
 target-version = ["py39", "py310"]
 
 [tool.ruff]
-target-version = "py39"
 select = ["ALL"]
 ignore = [
-  "ANN",
-  "D203", # Black
+  "ANN", # Maybe sometime
+  "D203", # Black, ping/pong with D211
   "D213", # Ping/pong with D212
   #"E203", # Black, uncomment when/if ruff starts to support
   "E501", # Black
@@ -15,6 +14,7 @@ ignore = [
 
 ]
 fix = true
+target-version = "py39"
 
 [tool.ruff.isort]
 combine-as-imports = true # Home Assistant preference
