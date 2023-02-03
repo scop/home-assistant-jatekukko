@@ -1,2 +1,2 @@
-pytekukko==0.13.0
-ruff==0.0.240
+pytekukko ==0.13.0
+ruff ==0.0.240
