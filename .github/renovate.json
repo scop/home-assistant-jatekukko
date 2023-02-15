@@ -14,9 +14,7 @@
   "semanticCommits": "enabled",
   "commitMessageTopic": "{{depName}}",
   "pip_requirements": {
-    "fileMatch": [
-      "(^|/)(requirements[\\w-]*\\.txt|\\.pre-commit-config\\.yaml)$"
-    ]
+    "fileMatch": ["(^|/)requirements[\\w-]*\\.txt$"]
   },
   "regexManagers": [
     {
