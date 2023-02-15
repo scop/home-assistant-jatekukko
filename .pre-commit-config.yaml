@@ -11,6 +11,18 @@ repos:
         args:
           - --quiet
 
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        language: python
+        additional_dependencies:
+          - venv-run==0.1.2
+        entry: venv-run mypy custom_components
+        types: [python]
+        pass_filenames: false
+        require_serial: true
+
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.7.1
     hooks:
