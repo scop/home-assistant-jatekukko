@@ -7,16 +7,12 @@ from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
 from pytekukko import SERVICE_TIMEZONE
 from pytekukko.models import InvoiceHeader
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN
 from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
-from .models import JatekukkoData, ServiceData
+from .models import ServiceData
 
 
 async def async_setup_entry(
@@ -83,7 +79,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for date in self.collection_schedule:
             if date >= today:
-                return CalendarEvent(start=date, end=date, summary=self.name)
+                return CalendarEvent(start=date, end=date, summary=self.name)  # type: ignore[call-arg]
         return None
 
     async def async_get_events(
@@ -105,17 +101,17 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         )
 
         return [
-            CalendarEvent(start=date, end=date, summary=self.name)
+            CalendarEvent(start=date, end=date, summary=self.name)  # type: ignore[call-arg]
             for date in matching_dates
         ]
 
 
-class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
+class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     """Jätekukko invoice calendar."""
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator[JatekukkoData],
+        coordinator: JatekukkoCoordinator,
         entry: ConfigEntry,
     ) -> None:
         """Initialize the calendar."""
@@ -149,7 +145,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for invoice_header in self.invoice_headers:
             if invoice_header.due_date >= today:
-                return CalendarEvent(
+                return CalendarEvent(  # type: ignore[call-arg]
                     start=invoice_header.due_date,
                     end=invoice_header.due_date,
                     summary=invoice_header.name,
@@ -174,7 +170,7 @@ class JatekukkoInvoiceCalendar(CoordinatorEntity, CalendarEntity):
         )
 
         return [
-            CalendarEvent(
+            CalendarEvent(  # type: ignore[call-arg]
                 start=invoice_header.due_date,
                 end=invoice_header.due_date,
                 summary=invoice_header.name,

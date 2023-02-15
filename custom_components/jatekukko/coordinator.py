@@ -19,13 +19,13 @@ from .const import CONF_CUSTOMER_NUMBER, DEFAULT_UPDATE_INTERVAL, DOMAIN, LOGGER
 from .models import JatekukkoData, ServiceData
 
 
-class JatekukkoCoordinatorEntity(CoordinatorEntity):
+class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
     """Data update coordinator entity base class for the jatekukko integration."""
 
     @property
     def device_info(self) -> DeviceInfo:
         """Get service information."""
-        return DeviceInfo(
+        return DeviceInfo(  # type: ignore[typeddict-item,no-any-return]
             configuration_url="https://tilasto.jatekukko.fi/indexservice2.jsp",
             default_manufacturer="Jätekukko",
             default_model="Omakukko",
@@ -37,7 +37,7 @@ class JatekukkoCoordinatorEntity(CoordinatorEntity):
         )
 
 
-class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
+class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):  # type: ignore[type-arg]
     """Data update coordinator for the jatekukko integration."""
 
     def __init__(self, hass: HomeAssistant, name: str, client: Pytekukko) -> None:
@@ -50,7 +50,7 @@ class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
             update_interval=DEFAULT_UPDATE_INTERVAL,
         )
 
-    async def _async_update_data(self) -> JatekukkoData:
+    async def _async_update_data(self) -> JatekukkoData:  # type: ignore[override]
         try:
             services = await self.client.get_services()
         except aiohttp.ClientResponseError as ex:

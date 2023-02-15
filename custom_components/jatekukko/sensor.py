@@ -9,12 +9,10 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from pytekukko.models import Service as PytekukkoService
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN
-from .coordinator import JatekukkoCoordinatorEntity
-from .models import JatekukkoData
+from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
 
 
 async def async_setup_entry(
@@ -38,7 +36,7 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator[JatekukkoData],
+        coordinator: JatekukkoCoordinator,
         entry: ConfigEntry,
         service: PytekukkoService,
     ) -> None:
@@ -47,7 +45,7 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
 
         self._pos = service.pos
 
-        self.entity_description = SensorEntityDescription(
+        self.entity_description = SensorEntityDescription(  # type: ignore[call-arg]
             key="next_collection",
             name=service.name,
             device_class=SensorDeviceClass.DATE,
@@ -56,7 +54,7 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Respond to a DataUpdateCoordinator update."""
+        """Respond to a JatekukkoCoordinator update."""
         self.update_from_latest_data()
         super()._handle_coordinator_update()
 
