@@ -1,6 +1,6 @@
 pytekukko==0.13.0
 
-black==23.1.0
+black==23.3.0
 mypy==1.0.0
   homeassistant-stubs>=2022.11.0
   voluptuous-stubs>=0.1.1
