@@ -79,7 +79,11 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for date in self.collection_schedule:
             if date >= today:
-                return CalendarEvent(start=date, end=date, summary=self.name)  # type: ignore[call-arg]
+                return CalendarEvent(  # type: ignore[call-arg]
+                    start=date,
+                    end=date + datetime.timedelta(days=1),
+                    summary=self.name,
+                )
         return None
 
     async def async_get_events(
@@ -101,7 +105,11 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         )
 
         return [
-            CalendarEvent(start=date, end=date, summary=self.name)  # type: ignore[call-arg]
+            CalendarEvent(  # type: ignore[call-arg]
+                start=date,
+                end=date + datetime.timedelta(days=1),
+                summary=self.name,
+            )
             for date in matching_dates
         ]
 
@@ -147,7 +155,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
             if invoice_header.due_date >= today:
                 return CalendarEvent(  # type: ignore[call-arg]
                     start=invoice_header.due_date,
-                    end=invoice_header.due_date,
+                    end=invoice_header.due_date + datetime.timedelta(days=1),
                     summary=invoice_header.name,
                 )
         return None
@@ -172,7 +180,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         return [
             CalendarEvent(  # type: ignore[call-arg]
                 start=invoice_header.due_date,
-                end=invoice_header.due_date,
+                end=invoice_header.due_date + datetime.timedelta(days=1),
                 summary=invoice_header.name,
             )
             for invoice_header in matching_invoice_headers
