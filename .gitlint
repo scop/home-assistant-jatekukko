@@ -1,7 +1,6 @@
 [general]
 ignore = body-is-missing
 ignore-revert-commits = false
-ignore-stdin = true
 contrib = contrib-title-conventional-commits
 regex-style-search = true
 
