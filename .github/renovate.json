@@ -13,9 +13,6 @@
   ],
   "semanticCommits": "enabled",
   "commitMessageTopic": "{{depName}}",
-  "pip_requirements": {
-    "fileMatch": ["(^|/)requirements[\\w-]*\\.txt$"]
-  },
   "regexManagers": [
     {
       "fileMatch": ["^custom_components/jatekukko/manifest\\.json$"],
