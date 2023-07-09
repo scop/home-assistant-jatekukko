@@ -25,7 +25,7 @@ class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
     @property
     def device_info(self) -> DeviceInfo:
         """Get service information."""
-        return DeviceInfo(  # type: ignore[typeddict-item,no-any-return]
+        return DeviceInfo(
             configuration_url="https://tilasto.jatekukko.fi/indexservice2.jsp",
             default_manufacturer="Jätekukko",
             default_model="Omakukko",
@@ -37,7 +37,7 @@ class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
         )
 
 
-class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):  # type: ignore[type-arg]
+class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
     """Data update coordinator for the jatekukko integration."""
 
     def __init__(self, hass: HomeAssistant, name: str, client: Pytekukko) -> None:
@@ -50,7 +50,7 @@ class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):  # type: ignor
             update_interval=DEFAULT_UPDATE_INTERVAL,
         )
 
-    async def _async_update_data(self) -> JatekukkoData:  # type: ignore[override]
+    async def _async_update_data(self) -> JatekukkoData:
         try:
             services = await self.client.get_services()
         except aiohttp.ClientResponseError as ex:
