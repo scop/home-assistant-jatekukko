@@ -1,4 +1,4 @@
-pytekukko==0.13.0
+pytekukko==0.14.0
 
 black==23.3.0
 mypy==1.4.1
