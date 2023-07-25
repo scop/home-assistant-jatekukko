@@ -27,8 +27,8 @@ class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
         """Get service information."""
         return DeviceInfo(
             configuration_url="https://tilasto.jatekukko.fi/indexservice2.jsp",
-            default_manufacturer="Jätekukko",
-            default_model="Omakukko",
+            manufacturer="Jätekukko",
+            model="Omakukko",
             entry_type=DeviceEntryType.SERVICE,
             identifiers={
                 (DOMAIN, self.coordinator.config_entry.data[CONF_CUSTOMER_NUMBER]),
