@@ -15,12 +15,10 @@
   "commitMessageTopic": "{{depName}}",
   "regexManagers": [
     {
-      "fileMatch": ["^custom_components/jatekukko/manifest\\.json$"],
-      "matchStrings": ["\\s(?<depName>[\\w-]+)==(?<currentValue>\\S+)"],
-      "datasourceTemplate": "pypi"
-    },
-    {
-      "fileMatch": ["^\\.pre-commit-config\\.yaml$"],
+      "fileMatch": [
+        "^\\.pre-commit-config\\.yaml$",
+        "^custom_components/jatekukko/manifest\\.json$"
+      ],
       "matchStrings": ["(?<depName>[\\w-]+)(?<currentValue>==[a-z0-9.]+)"],
       "datasourceTemplate": "pypi"
     }
