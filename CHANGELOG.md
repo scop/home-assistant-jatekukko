@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.11.0](https://github.com/scop/home-assistant-jatekukko/compare/v0.10.2...v0.11.0) (2023-07-25)
+
+
+### Features
+
+* **python:** drop 3.10 support ([b724291](https://github.com/scop/home-assistant-jatekukko/commit/b724291a32577ade2df47479af15273b386db81b))
+
+
+### Bug Fixes
+
+* **coordinator:** appease HA's new device info validity checks ([f0fc85d](https://github.com/scop/home-assistant-jatekukko/commit/f0fc85d032a230a7fa8b407b6d978e15e5e54fa4))
+
 ## [0.10.2](https://github.com/scop/home-assistant-jatekukko/compare/v0.10.1...v0.10.2) (2023-04-03)
 
 
