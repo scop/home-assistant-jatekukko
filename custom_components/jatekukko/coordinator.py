@@ -57,7 +57,7 @@ class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
                 raise ConfigEntryAuthFailed from ex
             raise
 
-        # TODO(scop): do not fetch collection schedule for disabled service entities? # noqa: FIX002,TD003
+        # TODO(scop): do not fetch schedule for disabled service entities? # noqa: FIX002,TD003,E501
         results = await asyncio.gather(
             *(self.client.get_collection_schedule(service) for service in services),
             self.client.get_invoice_headers(),

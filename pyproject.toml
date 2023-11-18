@@ -1,6 +1,3 @@
-[tool.black]
-target-version = ["py311"]
-
 [tool.mypy]
 python_version = "3.11"
 enable_error_code = "ignore-without-code,redundant-self,truthy-iterable"
@@ -11,14 +8,25 @@ warn_unreachable = true
 select = ["ALL"]
 ignore = [
   "ANN", # Maybe sometime
-  "COM", # Black
-  "D203", # Black, ping/pong with D211
+  "D203", # Ping/pong with D211
   "D213", # Ping/pong with D212
-  #"E203", # Black, uncomment when/if ruff starts to support
-  "E50", # Black
-  "E70", # Black
   "TCH", # Maybe sometime
-
+  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+  # (keep order of ignores here same as ^there for maintainability)
+  "W191",
+  "E111",
+  "E114",
+  "E117",
+  "D206",
+  "D300",
+  "Q000",
+  "Q001",
+  "Q002",
+  "Q003",
+  "COM812",
+  "COM819",
+  "ISC001",
+  "ISC002",
 ]
 fix = true
 target-version = "py311"
