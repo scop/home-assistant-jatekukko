@@ -1,4 +1,4 @@
-pytekukko==0.14.0
+pytekukko==0.16.0
 
 mypy==1.7.0
   homeassistant-stubs>=2023.7.0
