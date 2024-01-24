@@ -1,15 +1,15 @@
-name: "Release"
+name: Release
 
 on:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
   release_please:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     steps:
-      - uses: "google-github-actions/release-please-action@v4"
+      - uses: google-github-actions/release-please-action@v4
         with:
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
