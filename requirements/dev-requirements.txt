@@ -3,4 +3,4 @@ pytekukko==0.14.0
 mypy==1.7.0
   homeassistant-stubs>=2023.7.0
   voluptuous-stubs>=0.1.1
-ruff==0.1.6
+ruff==0.4.4

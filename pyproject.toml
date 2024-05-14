@@ -5,6 +5,10 @@ strict = true
 warn_unreachable = true
 
 [tool.ruff]
+fix = true
+target-version = "py311"
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
   "ANN", # Maybe sometime
@@ -28,10 +32,8 @@ ignore = [
   "ISC001",
   "ISC002",
 ]
-fix = true
-target-version = "py311"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true # Home Assistant preference
 force-sort-within-sections = true # Home Assistant preference
 
