@@ -111,13 +111,23 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     user_input["customer_number"]
                 )
                 if existing_entry:
-                    await self.hass.config_entries.async_reload(existing_entry.entry_id)
-                    return self.async_abort(reason="reauth_successful")
+                    return self.async_update_reload_and_abort(
+                        existing_entry,
+                        data={**existing_entry.data, **user_input},
+                        reason="reauth_successful",
+                    )
                 return self.async_abort(reason="reauth_failed_existing")
 
+        reauth_entry = self._get_reauth_entry()
+        data_schema = self.add_suggested_values_to_schema(
+            STEP_USER_DATA_SCHEMA,
+            {
+                CONF_CUSTOMER_NUMBER: reauth_entry.data[CONF_CUSTOMER_NUMBER],
+            },
+        )
         return self.async_show_form(
             step_id="reauth_confirm",
-            data_schema=STEP_USER_DATA_SCHEMA,
+            data_schema=data_schema,
             errors=errors,
         )
 
