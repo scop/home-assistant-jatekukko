@@ -13,26 +13,33 @@
   ],
   "semanticCommits": "enabled",
   "commitMessageTopic": "{{depName}}",
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": [
         "^\\.pre-commit-config\\.yaml$",
         "^custom_components/jatekukko/manifest\\.json$"
       ],
-      "matchStrings": ["(?<depName>[\\w-]+)(?<currentValue>==[a-z0-9.]+)"],
+      "matchStrings": [
+        "(?<depName>[\\w-]+)(?<currentValue>==[a-z0-9.]+)"
+      ],
       "datasourceTemplate": "pypi"
     }
   ],
   "packageRules": [
     {
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "commitMessageTopic": "{{depName}}",
       "semanticCommitScope": "pre-commit"
     },
     {
-      "matchPackagePatterns": ["(^|/)ruff(-pre-commit)?$"],
       "groupName": "ruff",
-      "versioning": "pep440"
+      "versioning": "pep440",
+      "matchPackageNames": [
+        "/(^|/)ruff(-pre-commit)?$/"
+      ]
     }
   ]
 }
