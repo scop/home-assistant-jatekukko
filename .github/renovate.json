@@ -17,29 +17,12 @@
     {
       "customType": "regex",
       "fileMatch": [
-        "^\\.pre-commit-config\\.yaml$",
         "^custom_components/jatekukko/manifest\\.json$"
       ],
       "matchStrings": [
         "(?<depName>[\\w-]+)(?<currentValue>==[a-z0-9.]+)"
       ],
       "datasourceTemplate": "pypi"
-    }
-  ],
-  "packageRules": [
-    {
-      "matchManagers": [
-        "pre-commit"
-      ],
-      "commitMessageTopic": "{{depName}}",
-      "semanticCommitScope": "pre-commit"
-    },
-    {
-      "groupName": "ruff",
-      "versioning": "pep440",
-      "matchPackageNames": [
-        "/(^|/)ruff(-pre-commit)?$/"
-      ]
     }
   ]
 }

@@ -1,12 +1,13 @@
 *.egg-info/
 *~
+/.config/mise.*.local.toml
+/.config/mise.local.toml
 /.env
 /.idea/
 /.mise.*.local.toml
 /.mise.local.toml
-/.nox/
-/.python-version
+/.venv/
 /build/
 /dist/
-/venv/
+/uv.lock
 __pycache__/
