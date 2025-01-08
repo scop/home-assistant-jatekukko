@@ -1,0 +1,39 @@
+pre-commit:
+  jobs:
+    - name: tools
+      group:
+        parallel: true
+        jobs:
+          - name: dprint
+            glob: "*.{json,jsonc,md,toml,yaml}"
+            run: mise exec -- dprint fmt {staged_files}
+          - name: python-tools
+            glob: "*.py"
+            group:
+              jobs:
+                - name: ruff-check
+                  run: uv run ruff check --force-exclude --fix {staged_files}
+                - name: ruff-format
+                  run: uv run ruff format --force-exclude {staged_files}
+                - name: mypy
+                  run: uv run mypy custom_components
+    - name: tool-made-changes
+      run: |-
+        if test -n "${CI-}"; then
+          git diff --exit-code {staged_files}
+        else
+          git diff --quiet {staged_files}
+        fi
+        rc=$?
+        test $rc -eq 0 || echo "error: found files modified by tools" >&2
+        exit $rc
+
+commit-msg:
+  commands:
+    committed:
+      run: mise exec -- committed --config .config/committed.toml --fixup --wip --commit-file "{1}"
+
+commit-msgs-on-pr-branch:
+  commands:
+    committed:
+      run: mise exec -- committed --config .config/committed.toml -vv --no-merge-commit HEAD~..HEAD^2

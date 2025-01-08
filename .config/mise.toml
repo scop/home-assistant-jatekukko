@@ -1,0 +1,7 @@
+[tools]
+committed = "1.1.5"
+dprint = "0.48.0"
+lefthook = "latest"
+
+[env]
+NOX_DEFAULT_VENV_BACKEND = "uv"

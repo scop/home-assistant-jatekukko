@@ -5,4 +5,8 @@ contrib = contrib-title-conventional-commits
 regex-style-search = true
 
 [ignore-body-lines]
-regex = ^(Co-authored-by:|((Refs|See|-) )?https?://)
+regex = ^(Co-authored-by:|((Refs|See|[*-]) )?https?://)
+
+[ignore-by-author-name]
+regex = \[bot\]
+ignore = body-is-missing,title-max-length
