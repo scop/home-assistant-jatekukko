@@ -4,7 +4,9 @@
     "config:best-practices",
     ":prConcurrentLimit20",
     ":preserveSemverRanges",
-    ":semanticPrefixChore"
+    ":semanticPrefixChore",
+    "github>kachick/renovate-config-dprint#1.3.0",
+    "github>kachick/renovate-config-dprint:self"
   ],
   "ignorePresets": [
     ":dependencyDashboard",
