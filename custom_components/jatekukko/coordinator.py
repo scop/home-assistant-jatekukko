@@ -3,13 +3,12 @@
 import asyncio
 from datetime import date
 from http import HTTPStatus
-from typing import cast
+from typing import Any, cast
 
 import aiohttp
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers.device_registry import DeviceEntryType
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
@@ -24,10 +23,10 @@ from .models import JatekukkoData, ServiceData
 class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
     """Data update coordinator entity base class for the jatekukko integration."""
 
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Get service information."""
-        return DeviceInfo(
+    def __init__(self, coordinator: "JatekukkoCoordinator", context: Any = None):
+        """Set up a coordinator entity."""
+        super().__init__(coordinator, context)
+        self._attr_device_info = DeviceInfo(
             configuration_url="https://tilasto.jatekukko.fi/indexservice2.jsp",
             manufacturer="Jätekukko",
             model="Omakukko",

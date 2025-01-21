@@ -5,24 +5,24 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from pytekukko.models import Service as PytekukkoService
 
-from .const import CONF_CUSTOMER_NUMBER, DOMAIN
-from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
+from . import JatekukkoConfigEntry
+from .const import CONF_CUSTOMER_NUMBER
+from .coordinator import JatekukkoCoordinatorEntity
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: JatekukkoConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Jätekukko sensors based on a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     async_add_entities(
-        JatekukkoNextCollectionSensor(coordinator, entry, service_data.service)
+        JatekukkoNextCollectionSensor(entry, service_data.service)
         for _, service_data in coordinator.data.service_datas.items()
         if service_data.service.next_collection
     )
@@ -35,12 +35,11 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
 
     def __init__(
         self,
-        coordinator: JatekukkoCoordinator,
-        entry: ConfigEntry,
+        entry: JatekukkoConfigEntry,
         service: PytekukkoService,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
+        super().__init__(entry.runtime_data)
 
         self._pos = service.pos
 

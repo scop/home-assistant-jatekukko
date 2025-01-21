@@ -3,30 +3,30 @@
 import datetime
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from pytekukko import SERVICE_TIMEZONE
 from pytekukko.models import InvoiceHeader
 
-from .const import CONF_CUSTOMER_NUMBER, DOMAIN
-from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
+from . import JatekukkoConfigEntry
+from .const import CONF_CUSTOMER_NUMBER
+from .coordinator import JatekukkoCoordinatorEntity
 from .models import ServiceData
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: JatekukkoConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Jätekukko calendar entries based on a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     async_add_entities(
-        JatekukkoCollectionCalendar(coordinator, entry, service_data)
+        JatekukkoCollectionCalendar(entry, service_data)
         for _, service_data in coordinator.data.service_datas.items()
         if service_data.collection_schedule
     )
-    async_add_entities([JatekukkoInvoiceCalendar(coordinator, entry)])
+    async_add_entities([JatekukkoInvoiceCalendar(entry)])
 
 
 class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
@@ -34,12 +34,11 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     def __init__(
         self,
-        coordinator: JatekukkoCoordinator,
-        entry: ConfigEntry,
+        entry: JatekukkoConfigEntry,
         service_data: ServiceData,
     ) -> None:
         """Initialize the calendar."""
-        super().__init__(coordinator)
+        super().__init__(entry.runtime_data)
 
         self._pos = service_data.service.pos
 
@@ -118,11 +117,10 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     def __init__(
         self,
-        coordinator: JatekukkoCoordinator,
-        entry: ConfigEntry,
+        entry: JatekukkoConfigEntry,
     ) -> None:
         """Initialize the calendar."""
-        super().__init__(coordinator)
+        super().__init__(entry.runtime_data)
         self._attr_name = "Jätekukko invoices"
         self._attr_unique_id = f"invoices@{entry.data[CONF_CUSTOMER_NUMBER]}"
         self.invoice_headers: list[InvoiceHeader] = []

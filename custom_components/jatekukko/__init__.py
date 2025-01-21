@@ -6,7 +6,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from pytekukko import Pytekukko
 
-from .const import CONF_CUSTOMER_NUMBER, DOMAIN, LOGGER
+from .const import CONF_CUSTOMER_NUMBER, LOGGER
 from .coordinator import JatekukkoCoordinator
 
 PLATFORMS = [
@@ -14,8 +14,10 @@ PLATFORMS = [
     Platform.SENSOR,
 ]
 
+type JatekukkoConfigEntry = ConfigEntry[JatekukkoCoordinator]
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+
+async def async_setup_entry(hass: HomeAssistant, entry: JatekukkoConfigEntry) -> bool:
     """Set up jatekukko from a config entry."""
     client = Pytekukko(
         async_get_clientsession(hass),
@@ -28,16 +30,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         client=client,
     )
     await coordinator.async_config_entry_first_refresh()
-    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+    entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: JatekukkoConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
-        coordinator = hass.data[DOMAIN].pop(entry.entry_id)
+        coordinator = entry.runtime_data
         try:
             await coordinator.client.logout()
         except Exception:  # noqa: BLE001
