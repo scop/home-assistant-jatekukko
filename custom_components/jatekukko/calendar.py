@@ -3,30 +3,30 @@
 import datetime
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from pytekukko import SERVICE_TIMEZONE
 from pytekukko.models import InvoiceHeader
 
-from .const import CONF_CUSTOMER_NUMBER, DOMAIN
-from .coordinator import JatekukkoCoordinator, JatekukkoCoordinatorEntity
+from . import JatekukkoConfigEntry
+from .const import CONF_CUSTOMER_NUMBER
+from .coordinator import JatekukkoCoordinatorEntity
 from .models import ServiceData
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
+    hass: HomeAssistant,  # noqa: ARG001 # API
+    entry: JatekukkoConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Jätekukko calendar entries based on a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     async_add_entities(
-        JatekukkoCollectionCalendar(coordinator, entry, service_data)
+        JatekukkoCollectionCalendar(entry, service_data)
         for _, service_data in coordinator.data.service_datas.items()
         if service_data.collection_schedule
     )
-    async_add_entities([JatekukkoInvoiceCalendar(coordinator, entry)])
+    async_add_entities([JatekukkoInvoiceCalendar(entry)])
 
 
 class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
@@ -34,12 +34,11 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     def __init__(
         self,
-        coordinator: JatekukkoCoordinator,
-        entry: ConfigEntry,
+        entry: JatekukkoConfigEntry,
         service_data: ServiceData,
     ) -> None:
         """Initialize the calendar."""
-        super().__init__(coordinator)
+        super().__init__(entry.runtime_data)
 
         self._pos = service_data.service.pos
 
@@ -73,12 +72,12 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        if not self.name:  # should not really happen, but can in theory
-            return None
+        if not self.name:  # type: ignore[truthy-function] # false positive? # should not really happen, but can in theory
+            return None  # type: ignore[unreachable] # per above
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for date in self.collection_schedule:
             if date >= today:
-                return CalendarEvent(  # type: ignore[call-arg]
+                return CalendarEvent(
                     start=date,
                     end=date + datetime.timedelta(days=1),
                     summary=self.name,
@@ -92,8 +91,8 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
-        if not self.name:  # should not really happen, but can in theory
-            return []
+        if not self.name:  # type: ignore[truthy-function] # false positive? # should not really happen, but can in theory
+            return []  # type: ignore[unreachable] # per above
 
         start_date_date = start_date.date()
         end_date_date = end_date.date()
@@ -104,7 +103,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         )
 
         return [
-            CalendarEvent(  # type: ignore[call-arg]
+            CalendarEvent(
                 start=date,
                 end=date + datetime.timedelta(days=1),
                 summary=self.name,
@@ -118,11 +117,10 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
 
     def __init__(
         self,
-        coordinator: JatekukkoCoordinator,
-        entry: ConfigEntry,
+        entry: JatekukkoConfigEntry,
     ) -> None:
         """Initialize the calendar."""
-        super().__init__(coordinator)
+        super().__init__(entry.runtime_data)
         self._attr_name = "Jätekukko invoices"
         self._attr_unique_id = f"invoices@{entry.data[CONF_CUSTOMER_NUMBER]}"
         self.invoice_headers: list[InvoiceHeader] = []
@@ -152,7 +150,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
         for invoice_header in self.invoice_headers:
             if invoice_header.due_date >= today:
-                return CalendarEvent(  # type: ignore[call-arg]
+                return CalendarEvent(
                     start=invoice_header.due_date,
                     end=invoice_header.due_date + datetime.timedelta(days=1),
                     summary=invoice_header.name,
@@ -177,7 +175,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         )
 
         return [
-            CalendarEvent(  # type: ignore[call-arg]
+            CalendarEvent(
                 start=invoice_header.due_date,
                 end=invoice_header.due_date + datetime.timedelta(days=1),
                 summary=invoice_header.name,

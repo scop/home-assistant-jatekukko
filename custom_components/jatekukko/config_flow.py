@@ -7,7 +7,6 @@ import aiohttp
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from pytekukko import Pytekukko
@@ -54,7 +53,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self,
         user_input: dict[str, Any] | None = None,
-    ) -> FlowResult:
+    ) -> config_entries.ConfigFlowResult:
         """Handle the initial step."""
         if user_input is None:
             return self.async_show_form(
@@ -85,14 +84,16 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(self, _: dict[str, Any]) -> FlowResult:
+    async def async_step_reauth(
+        self, _: dict[str, Any]
+    ) -> config_entries.ConfigFlowResult:
         """Handle configuration by re-auth."""
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
         self,
         user_input: dict[str, Any] | None = None,
-    ) -> FlowResult:
+    ) -> config_entries.ConfigFlowResult:
         """Dialog that informs the user that reauth is required."""
         errors = {}
 
