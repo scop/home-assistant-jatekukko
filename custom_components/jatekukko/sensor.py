@@ -43,7 +43,7 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
 
         self._pos = service.pos
 
-        self.entity_description = SensorEntityDescription(  # type: ignore[call-arg]
+        self.entity_description = SensorEntityDescription(
             key="next_collection",
             name=service.name,
             device_class=SensorDeviceClass.DATE,
