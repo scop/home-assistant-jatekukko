@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.1](https://github.com/scop/home-assistant-jatekukko/compare/v0.11.0...v0.11.1) (2025-01-26)
+
+
+### Bug Fixes
+
+* **reauth:** entry reload on success ([99f95ad](https://github.com/scop/home-assistant-jatekukko/commit/99f95adadd1315a0d475416383fd635be1ad3c7e))
+* **reauth:** form defaults and persistence ([2e50fa4](https://github.com/scop/home-assistant-jatekukko/commit/2e50fa47dfbce6fffcd99cf474b6687d58b8f489))
+
 ## [0.11.0](https://github.com/scop/home-assistant-jatekukko/compare/v0.10.2...v0.11.0) (2023-07-25)
 
 
