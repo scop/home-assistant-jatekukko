@@ -37,6 +37,9 @@ ignore = [
   "ISC002",
 ]
 
+[tool.ruff.lint.flake8-builtins]
+builtins-allowed-modules = ["calendar"]
+
 [tool.ruff.lint.isort]
 combine-as-imports = true # Home Assistant preference
 force-sort-within-sections = true # Home Assistant preference
