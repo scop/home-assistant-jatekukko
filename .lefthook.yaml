@@ -12,9 +12,9 @@ pre-commit:
             group:
               jobs:
                 - name: ruff-check
-                  run: uv run ruff check --force-exclude --fix {staged_files}
+                  run: mise exec -- ruff check --force-exclude --fix {staged_files}
                 - name: ruff-format
-                  run: uv run ruff format --force-exclude {staged_files}
+                  run: mise exec -- ruff format --force-exclude {staged_files}
                 - name: mypy
                   run: uv run mypy custom_components
     - name: tool-made-changes
