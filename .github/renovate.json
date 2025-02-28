@@ -25,5 +25,11 @@
       ],
       "datasourceTemplate": "pypi"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": ["dprint/dprint-plugin-*"],
+      "groupName": "dprint plugins"
+    }
   ]
 }
