@@ -1,10 +1,10 @@
 [project]
 name = "home-assistant-jatekukko"
 dynamic = ["version"]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.13"
 enable_error_code = "ignore-without-code,redundant-self,truthy-iterable"
 strict = true
 strict_bytes = true
