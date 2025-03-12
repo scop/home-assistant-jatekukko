@@ -1,17 +1,20 @@
 """Jätekukko calendar entries."""
 
 import datetime
+import typing
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from pytekukko import SERVICE_TIMEZONE
-from pytekukko.models import InvoiceHeader
 
 from . import JatekukkoConfigEntry
 from .const import CONF_CUSTOMER_NUMBER
 from .coordinator import JatekukkoCoordinatorEntity
 from .models import ServiceData
+
+if typing.TYPE_CHECKING:
+    from pytekukko.models import InvoiceHeader
 
 
 async def async_setup_entry(
