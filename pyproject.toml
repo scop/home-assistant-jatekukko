@@ -21,6 +21,7 @@ ignore = [
   "D213", # Ping/pong with D212
   # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
   # (keep order of ignores here same as ^there for maintainability)
+  # https://github.com/astral-sh/ruff/issues/8175
   "W191",
   "E111",
   "E114",
