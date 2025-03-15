@@ -1,9 +1,8 @@
 """Data update coordinator support for the jatekukko integration."""
 
 import asyncio
-from datetime import date
 from http import HTTPStatus
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import aiohttp
 from homeassistant.core import HomeAssistant
@@ -14,10 +13,14 @@ from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
 )
 from pytekukko import Pytekukko
-from pytekukko.models import InvoiceHeader
 
 from .const import CONF_CUSTOMER_NUMBER, DEFAULT_UPDATE_INTERVAL, DOMAIN, LOGGER
 from .models import JatekukkoData, ServiceData
+
+if TYPE_CHECKING:
+    from datetime import date
+
+    from pytekukko.models import InvoiceHeader
 
 
 class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
@@ -65,9 +68,9 @@ class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
             self.client.get_invoice_headers(),
         )
         service_data = {
-            service.pos: ServiceData(service, cast(list[date], results[i]))
+            service.pos: ServiceData(service, cast("list[date]", results[i]))
             for i, service in enumerate(services)
         }
-        invoice_headers = cast(list[InvoiceHeader], results[-1])
+        invoice_headers = cast("list[InvoiceHeader]", results[-1])
 
         return JatekukkoData(service_data, invoice_headers)
