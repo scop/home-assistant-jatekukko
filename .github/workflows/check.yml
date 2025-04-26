@@ -31,14 +31,9 @@ jobs:
           fetch-depth: 0 # for commit message checks
       - uses: astral-sh/setup-uv@c7f87aa956e4c323abf06d5dec078e358f6b4d04 # v6.0.0
         with:
-          cache-dependency-glob: |
-            requirements/dev-requirements.txt
-            pyproject.toml
+          activate-environment: true
       - name: Install Python dev dependencies
-        run: |
-          set -euxo pipefail
-          uv venv
-          uv pip install --upgrade --requirements requirements/dev-requirements.txt
+        run: uv pip install --upgrade --requirements requirements/dev-requirements.txt
       - uses: jdx/mise-action@7a111ead46986ccad89a74ad013ba2a7c08c9e67 # v2.2.1
       - name: Check code
         run: lefthook run pre-commit --all-files --force --no-tty
