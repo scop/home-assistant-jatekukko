@@ -17,8 +17,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "^custom_components/jatekukko/manifest\\.json$"
+      "managerFilePatterns": [
+        "/^custom_components/jatekukko/manifest\\.json$/"
       ],
       "matchStrings": [
         "(?<depName>[\\w-]+)(?<currentValue>==[a-z0-9.]+)"
@@ -28,7 +28,9 @@
   ],
   "packageRules": [
     {
-      "matchDepNames": ["dprint/dprint-plugin-*"],
+      "matchDepNames": [
+        "dprint/dprint-plugin-*"
+      ],
       "groupName": "dprint plugins"
     }
   ]
