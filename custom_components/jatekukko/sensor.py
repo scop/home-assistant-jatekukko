@@ -1,5 +1,7 @@
 """Jätekukko sensors."""
 
+from typing import override
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -31,7 +33,7 @@ async def async_setup_entry(
 class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
     """Jätekukko Sensor."""
 
-    _attr_device_class = SensorDeviceClass.DATE
+    _attr_device_class: SensorDeviceClass | None = SensorDeviceClass.DATE
 
     def __init__(
         self,
@@ -51,11 +53,13 @@ class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{self._pos}@{entry.data[CONF_CUSTOMER_NUMBER]}"
 
     @callback
+    @override
     def _handle_coordinator_update(self) -> None:
         """Respond to a JatekukkoCoordinator update."""
         self.update_from_latest_data()
         super()._handle_coordinator_update()
 
+    @override
     async def async_added_to_hass(self) -> None:
         """Handle entity which will be added."""
         await super().async_added_to_hass()

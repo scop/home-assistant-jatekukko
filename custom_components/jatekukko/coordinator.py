@@ -2,7 +2,7 @@
 
 import asyncio
 from http import HTTPStatus
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, cast, override
 
 import aiohttp
 from homeassistant.core import HomeAssistant
@@ -54,6 +54,7 @@ class JatekukkoCoordinator(DataUpdateCoordinator[JatekukkoData]):
             update_interval=DEFAULT_UPDATE_INTERVAL,
         )
 
+    @override
     async def _async_update_data(self) -> JatekukkoData:
         try:
             services = await self.client.get_services()

@@ -1,7 +1,7 @@
 """Jätekukko calendar entries."""
 
 import datetime
-import typing
+from typing import TYPE_CHECKING, override
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.core import HomeAssistant, callback
@@ -13,7 +13,7 @@ from .const import CONF_CUSTOMER_NUMBER
 from .coordinator import JatekukkoCoordinatorEntity
 from .models import ServiceData
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from pytekukko.models import InvoiceHeader
 
 
@@ -50,11 +50,13 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         self.collection_schedule = sorted(service_data.collection_schedule)
 
     @callback
+    @override
     def _handle_coordinator_update(self) -> None:
         """Respond to a DataUpdateCoordinator update."""
         self.update_from_latest_data()
         super()._handle_coordinator_update()
 
+    @override
     async def async_added_to_hass(self) -> None:
         """Handle entity which will be added."""
         await super().async_added_to_hass()
@@ -73,6 +75,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         self.collection_schedule = sorted(service_data.collection_schedule)
 
     @property
+    @override
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
         if not self.name:  # should not really happen, but can in theory
@@ -87,9 +90,10 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
                 )
         return None
 
+    @override
     async def async_get_events(
         self,
-        hass: HomeAssistant,  # noqa: ARG002
+        hass: HomeAssistant,
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
@@ -129,11 +133,13 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         self.invoice_headers: list[InvoiceHeader] = []
 
     @callback
+    @override
     def _handle_coordinator_update(self) -> None:
         """Respond to a DataUpdateCoordinator update."""
         self.update_from_latest_data()
         super()._handle_coordinator_update()
 
+    @override
     async def async_added_to_hass(self) -> None:
         """Handle entity which will be added."""
         await super().async_added_to_hass()
@@ -148,6 +154,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         )
 
     @property
+    @override
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
         today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
@@ -160,9 +167,10 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
                 )
         return None
 
+    @override
     async def async_get_events(
         self,
-        hass: HomeAssistant,  # noqa: ARG002
+        hass: HomeAssistant,
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> list[CalendarEvent]:
