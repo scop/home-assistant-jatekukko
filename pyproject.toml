@@ -5,7 +5,7 @@ requires-python = ">=3.13"
 
 [tool.mypy]
 python_version = "3.13"
-enable_error_code = "ignore-without-code,redundant-self,truthy-iterable"
+enable_error_code = "explicit-override,ignore-without-code,redundant-self,truthy-iterable"
 strict = true
 warn_unreachable = true
 

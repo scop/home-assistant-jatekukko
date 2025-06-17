@@ -1,7 +1,7 @@
 """Config flow for jatekukko integration."""
 
 from http import HTTPStatus
-from typing import Any, Final
+from typing import Any, Final, override
 
 import aiohttp
 from homeassistant import config_entries
@@ -50,6 +50,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
+    @override
     async def async_step_user(
         self,
         user_input: dict[str, Any] | None = None,
