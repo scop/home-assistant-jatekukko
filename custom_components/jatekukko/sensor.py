@@ -33,7 +33,7 @@ async def async_setup_entry(
 class JatekukkoNextCollectionSensor(JatekukkoCoordinatorEntity, SensorEntity):
     """Jätekukko Sensor."""
 
-    _attr_device_class = SensorDeviceClass.DATE
+    _attr_device_class: SensorDeviceClass | None = SensorDeviceClass.DATE
 
     def __init__(
         self,
