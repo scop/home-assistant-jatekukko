@@ -1,5 +1,5 @@
 pytekukko==0.16.0
 
-mypy==1.16.1
+mypy==1.18.2
   homeassistant-stubs>=2025.2.0
   voluptuous-stubs>=0.1.1
