@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/scop/home-assistant-jatekukko/compare/v0.11.1...v0.11.2) (2025-10-12)
+
+
+### Performance Improvements
+
+* quote typing.cast type expressions ([7390b77](https://github.com/scop/home-assistant-jatekukko/commit/7390b776ac8f2a781251ef9a9ebb30258b98d688))
+
 ## [0.11.1](https://github.com/scop/home-assistant-jatekukko/compare/v0.11.0...v0.11.1) (2025-01-26)
 
 
