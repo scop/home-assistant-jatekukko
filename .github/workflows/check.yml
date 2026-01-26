@@ -39,5 +39,5 @@ jobs:
       - name: Check code
         run: lefthook run pre-commit --all-files --force --no-tty
       - name: Check commit messages
-        run: lefthook run commit-msgs-on-pr-branch --no-tty
+        run: lefthook run commits-on-pr-branch --no-tty
         if: ${{ github.event_name == 'pull_request' }}
