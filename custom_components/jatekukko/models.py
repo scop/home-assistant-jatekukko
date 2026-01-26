@@ -16,5 +16,5 @@ class ServiceData(NamedTuple):
 class JatekukkoData(NamedTuple):
     """Container for Jätekukko integration wide data."""
 
-    service_datas: dict[int, ServiceData]
+    service_data: dict[int, ServiceData]
     invoice_headers: list[InvoiceHeader]

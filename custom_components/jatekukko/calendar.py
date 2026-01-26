@@ -26,7 +26,7 @@ async def async_setup_entry(
     coordinator = entry.runtime_data
     async_add_entities(
         JatekukkoCollectionCalendar(entry, service_data)
-        for _, service_data in coordinator.data.service_datas.items()
+        for _, service_data in coordinator.data.service_data.items()
         if service_data.collection_schedule
     )
     async_add_entities([JatekukkoInvoiceCalendar(entry)])
@@ -65,7 +65,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @callback
     def update_from_latest_data(self) -> None:
         """Update the state."""
-        service_data = self.coordinator.data.service_datas.get(self._pos)
+        service_data = self.coordinator.data.service_data.get(self._pos)
         if not service_data:
             self._attr_available = False
             self.collection_schedule.clear()
