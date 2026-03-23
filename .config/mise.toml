@@ -1,5 +1,5 @@
 [tools]
-committed = "1.1.10"
+committed = "1.1.11"
 dprint = "0.53.0"
 lefthook = "latest"
 ruff = "0.14.14"
