@@ -7,7 +7,7 @@ dprint = "0.55.1"
 lefthook = "latest"
 ruff = "0.15.20"
 rumdl = "0.1.81"
-typos = "1.46.0"
+typos = "1.48.0"
 
 [env]
 NOX_DEFAULT_VENV_BACKEND = "uv"
