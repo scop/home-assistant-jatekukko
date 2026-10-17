@@ -182,9 +182,9 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         end_date_date = end_date.date()
 
         matching_invoice_headers = filter(
-            lambda invoice_header: start_date_date
-            <= invoice_header.due_date
-            < end_date_date,
+            lambda invoice_header: (
+                start_date_date <= invoice_header.due_date < end_date_date
+            ),
             self.invoice_headers,
         )
 
