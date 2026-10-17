@@ -2,7 +2,7 @@
 
 # Copyright 2022 Ville Skyttä
 
-import datetime
+import datetime as dt
 from typing import TYPE_CHECKING, override
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
@@ -83,12 +83,12 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         """Return the next upcoming event."""
         if not self.name:  # should not really happen, but can in theory
             return None
-        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
+        today = dt.datetime.now(tz=SERVICE_TIMEZONE).date()
         for date in self.collection_schedule:
             if date >= today:
                 return CalendarEvent(
                     start=date,
-                    end=date + datetime.timedelta(days=1),
+                    end=date + dt.timedelta(days=1),
                     summary=self.name,  # type: ignore[arg-type] # false positive, cf. "not self.name" check above
                 )
         return None
@@ -97,8 +97,8 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     async def async_get_events(
         self,
         hass: HomeAssistant,
-        start_date: datetime.datetime,
-        end_date: datetime.datetime,
+        start_date: dt.datetime,
+        end_date: dt.datetime,
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
         if not self.name:  # should not really happen, but can in theory
@@ -115,7 +115,7 @@ class JatekukkoCollectionCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         return [
             CalendarEvent(
                 start=date,
-                end=date + datetime.timedelta(days=1),
+                end=date + dt.timedelta(days=1),
                 summary=self.name,  # type: ignore[arg-type] # false positive, cf. "not self.name" check above
             )
             for date in matching_dates
@@ -160,12 +160,12 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     @override
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        today = datetime.datetime.now(tz=SERVICE_TIMEZONE).date()
+        today = dt.datetime.now(tz=SERVICE_TIMEZONE).date()
         for invoice_header in self.invoice_headers:
             if invoice_header.due_date >= today:
                 return CalendarEvent(
                     start=invoice_header.due_date,
-                    end=invoice_header.due_date + datetime.timedelta(days=1),
+                    end=invoice_header.due_date + dt.timedelta(days=1),
                     summary=invoice_header.name,
                 )
         return None
@@ -174,8 +174,8 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
     async def async_get_events(
         self,
         hass: HomeAssistant,
-        start_date: datetime.datetime,
-        end_date: datetime.datetime,
+        start_date: dt.datetime,
+        end_date: dt.datetime,
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
         start_date_date = start_date.date()
@@ -191,7 +191,7 @@ class JatekukkoInvoiceCalendar(JatekukkoCoordinatorEntity, CalendarEntity):
         return [
             CalendarEvent(
                 start=invoice_header.due_date,
-                end=invoice_header.due_date + datetime.timedelta(days=1),
+                end=invoice_header.due_date + dt.timedelta(days=1),
                 summary=invoice_header.name,
             )
             for invoice_header in matching_invoice_headers
