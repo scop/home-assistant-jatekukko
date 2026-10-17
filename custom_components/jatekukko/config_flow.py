@@ -3,18 +3,20 @@
 # Copyright 2022 Ville Skyttä
 
 from http import HTTPStatus
-from typing import Any, Final, override
+from typing import TYPE_CHECKING, Any, Final, override
 
 import aiohttp
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from pytekukko import Pytekukko
 import voluptuous as vol
 
 from .const import CONF_CUSTOMER_NUMBER, DOMAIN, LOGGER
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 STEP_USER_DATA_SCHEMA: Final = vol.Schema(
     {

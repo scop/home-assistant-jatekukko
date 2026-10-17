@@ -7,14 +7,12 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, cast, override
 
 import aiohttp
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
-from pytekukko import Pytekukko
 
 from .const import CONF_CUSTOMER_NUMBER, DEFAULT_UPDATE_INTERVAL, DOMAIN, LOGGER
 from .models import JatekukkoData, ServiceData
@@ -22,13 +20,15 @@ from .models import JatekukkoData, ServiceData
 if TYPE_CHECKING:
     from datetime import date
 
+    from homeassistant.core import HomeAssistant
+    from pytekukko import Pytekukko
     from pytekukko.models import InvoiceHeader
 
 
 class JatekukkoCoordinatorEntity(CoordinatorEntity["JatekukkoCoordinator"]):
     """Data update coordinator entity base class for the jatekukko integration."""
 
-    def __init__(self, coordinator: "JatekukkoCoordinator", context: Any = None):
+    def __init__(self, coordinator: JatekukkoCoordinator, context: Any = None):
         """Set up a coordinator entity."""
         super().__init__(coordinator, context)
         self._attr_device_info = DeviceInfo(

@@ -2,14 +2,18 @@
 
 # Copyright 2022 Ville Skyttä
 
+from typing import TYPE_CHECKING
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, Platform
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from pytekukko import Pytekukko
 
 from .const import CONF_CUSTOMER_NUMBER, LOGGER
 from .coordinator import JatekukkoCoordinator
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 PLATFORMS = [
     Platform.CALENDAR,

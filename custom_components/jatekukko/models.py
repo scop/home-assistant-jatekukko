@@ -2,10 +2,12 @@
 
 # Copyright 2022 Ville Skyttä
 
-from datetime import date
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
-from pytekukko.models import InvoiceHeader, Service
+if TYPE_CHECKING:
+    from datetime import date
+
+    from pytekukko.models import InvoiceHeader, Service
 
 
 class ServiceData(NamedTuple):

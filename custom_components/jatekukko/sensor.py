@@ -2,7 +2,7 @@
 
 # Copyright 2022 Ville Skyttä
 
-from typing import override
+from typing import TYPE_CHECKING, override
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -10,12 +10,15 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from pytekukko.models import Service as PytekukkoService
 
-from . import JatekukkoConfigEntry
 from .const import CONF_CUSTOMER_NUMBER
 from .coordinator import JatekukkoCoordinatorEntity
+
+if TYPE_CHECKING:
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from pytekukko.models import Service as PytekukkoService
+
+    from . import JatekukkoConfigEntry
 
 
 async def async_setup_entry(
