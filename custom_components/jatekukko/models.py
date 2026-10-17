@@ -1,5 +1,7 @@
 """Model objects for the jatekukko integration."""
 
+# Copyright 2022 Ville Skyttä
+
 from datetime import date
 from typing import NamedTuple
 

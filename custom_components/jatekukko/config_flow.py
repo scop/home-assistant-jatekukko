@@ -1,5 +1,7 @@
 """Config flow for jatekukko integration."""
 
+# Copyright 2022 Ville Skyttä
+
 from http import HTTPStatus
 from typing import Any, Final, override
 

@@ -1,5 +1,7 @@
 """The jatekukko integration."""
 
+# Copyright 2022 Ville Skyttä
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, Platform
 from homeassistant.core import HomeAssistant

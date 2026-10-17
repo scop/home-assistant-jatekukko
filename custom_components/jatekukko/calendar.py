@@ -1,5 +1,7 @@
 """Jätekukko calendar entries."""
 
+# Copyright 2022 Ville Skyttä
+
 import datetime
 from typing import TYPE_CHECKING, override
 

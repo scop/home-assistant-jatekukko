@@ -1,5 +1,7 @@
 """Data update coordinator support for the jatekukko integration."""
 
+# Copyright 2022 Ville Skyttä
+
 import asyncio
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, cast, override

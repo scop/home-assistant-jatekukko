@@ -1,5 +1,7 @@
 """Jätekukko sensors."""
 
+# Copyright 2022 Ville Skyttä
+
 from typing import override
 
 from homeassistant.components.sensor import (
