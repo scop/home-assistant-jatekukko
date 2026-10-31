@@ -1,11 +1,11 @@
 {
   "excludes": [
-    "/.git/**",
-    "/.github/release-please-manifest.json",
-    "/.mypy_cache/**",
-    "/.venv/**",
-    "/custom_components/jatekukko/manifest.json",
-    "/custom_components/*/translations/*.json",
+    "../.git/**",
+    "../.github/release-please-manifest.json",
+    "../.mypy_cache/**",
+    "../.venv/**",
+    "../custom_components/jatekukko/manifest.json",
+    "../custom_components/*/translations/*.json",
   ],
   "plugins": [
     "https://plugins.dprint.dev/json-0.25.2.wasm",
